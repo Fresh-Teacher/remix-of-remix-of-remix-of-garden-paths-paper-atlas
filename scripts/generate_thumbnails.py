@@ -5,7 +5,11 @@ src/data/catalog/thumb-map.json (url -> {thumbUrl, pages}). Then run
 python scripts/bake_page_items.py --thumb-map src/data/catalog/thumb-map.json"""
 import argparse, hashlib, io, json, pathlib, urllib.parse, urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import urllib.error
 import pypdfium2 as pdfium
+
+# Shared cover for source links that return 404 (no pages count).
+BROKEN = {'thumbUrl': '/thumbs/broken-link.webp'}
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 CATALOG = ROOT / 'src/data/catalog'
@@ -45,7 +49,7 @@ if __name__ == '__main__':
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--match', default='')
     p.add_argument('--limit', type=int, default=0)
-    p.add_argument('--workers', type=int, default=8)
+    p.add_argument('--workers', type=int, default=1)  # pdfium is not thread-safe
     a = p.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
     done = json.loads(MAP.read_text()) if MAP.exists() else {}
@@ -56,6 +60,9 @@ if __name__ == '__main__':
         jobs = {pool.submit(bake, u): u for u in todo}
         for i, job in enumerate(as_completed(jobs), 1):
             try: done[jobs[job]] = job.result()
+            except urllib.error.HTTPError as e:
+                if e.code == 404: done[jobs[job]] = BROKEN
+                failed += 1
             except Exception: failed += 1
             if i % 50 == 0: MAP.write_text(json.dumps(done, indent=0, sort_keys=True))
     MAP.write_text(json.dumps(done, indent=0, sort_keys=True))

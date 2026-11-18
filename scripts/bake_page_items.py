@@ -16,7 +16,7 @@ def bake(root, size_map=None, thumb_map=None):
     for stem, records in shards.items():
         changed = False
         for record in records.values():
-            value = sizes.get(record['pdfUrl'])
+            value = sizes.get(record['pdfUrl'], (thumbs.get(record['pdfUrl']) or {}).get('sizeBytes'))
             if value is not None and record.get('sizeBytes') != value:
                 record['sizeBytes'] = value
                 changed = True

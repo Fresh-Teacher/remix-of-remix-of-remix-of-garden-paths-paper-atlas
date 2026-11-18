@@ -34,7 +34,8 @@ def fetch(url):
 
 def bake(url):
     name = f'{thumb_id(url)}.webp'
-    pdf = pdfium.PdfDocument(fetch(url))
+    data = fetch(url)
+    pdf = pdfium.PdfDocument(data)
     try:
         pages = len(pdf)
         page = pdf[0]
@@ -43,7 +44,7 @@ def bake(url):
         (OUT / name).write_bytes(buf.getvalue())
     finally:
         pdf.close()
-    return {'thumbUrl': f'/thumbs/{name}', 'pages': pages}
+    return {'thumbUrl': f'/thumbs/{name}', 'pages': pages, 'sizeBytes': len(data)}
 
 if __name__ == '__main__':
     p = argparse.ArgumentParser(description=__doc__)
@@ -53,7 +54,7 @@ if __name__ == '__main__':
     a = p.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
     done = json.loads(MAP.read_text()) if MAP.exists() else {}
-    todo = [u for u in target_urls([m for m in a.match.lower().split(',') if m]) if u not in done or not (ROOT / 'public' / done[u]['thumbUrl'].lstrip('/')).exists()]
+    todo = [u for u in target_urls([m for m in a.match.lower().split(',') if m]) if u not in done or (done[u] != BROKEN and 'sizeBytes' not in done[u]) or not (ROOT / 'public' / done[u]['thumbUrl'].lstrip('/')).exists()]
     if a.limit: todo = todo[:a.limit]
     failed = 0
     with ThreadPoolExecutor(a.workers) as pool:

@@ -6,6 +6,30 @@ const root = join(process.cwd(), 'src/data/catalog');
 const read = (p: string) => JSON.parse(readFileSync(p, 'utf8'));
 
 describe('baked page items', () => {
+  it('keeps prepared Senior One page counts and sizes consistent with saved covers', () => {
+    const thumbs = read(join(root, 'thumb-map.json'));
+    const prepared = new Set<string>();
+    for (const kind of ['resources', 'repositories']) {
+      for (const name of readdirSync(join(root, 'page-items', kind))) {
+        if (!/^SeniorOne|^(?:exams-s1|s1(?:-notes|-past-papers)?)\.json$/.test(name)) continue;
+        for (const item of read(join(root, 'page-items', kind, name))) {
+          const saved = thumbs[item.pdfUrl];
+          if (!saved) continue;
+          expect(item.thumbUrl).toBe(saved.thumbUrl);
+          expect(existsSync(join(process.cwd(), 'public', saved.thumbUrl))).toBe(true);
+          if (saved.thumbUrl === '/thumbs/broken-link.webp') expect(item.pages).toBeUndefined();
+          else {
+            expect(item.pages).toBe(saved.pages);
+            expect(item.pages).toBeGreaterThan(0);
+            expect(item.sizeBytes).toBe(saved.sizeBytes);
+            expect(item.sizeBytes).toBeGreaterThan(0);
+            prepared.add(item.pdfUrl);
+          }
+        }
+      }
+    }
+    expect(prepared.size).toBe(1218);
+  });
   it('keeps Primary 6 covers, page counts and sizes consistent in every collection', () => {
     const thumbs = read(join(root, 'thumb-map.json'));
     const urls = new Set<string>();

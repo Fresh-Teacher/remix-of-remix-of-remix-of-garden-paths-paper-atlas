@@ -1,4 +1,6 @@
 # Repository import
+- [x] Prepare Senior One PDF previews: 1,218 covers with page counts and sizes; 67 confirmed missing files marked; all six collections checked and phone layout verified.
+- [ ] Recover two Senior One Biology PDFs: both source files require passwords; unlocked replacements required.
 - [x] Prepare Primary 6 PDF previews: 2,102 real covers with page counts and sizes; 188 confirmed missing files marked; all eight collections checked, including phone cards.
 - [ ] Recover five Primary 6 PDFs: two damaged files, two password-protected source copies, and one malformed Maths book require readable replacements.
 - [x] Prepare Primary 4 PDF previews: 130 real covers with page counts and sizes; 161 confirmed missing files marked; all three collections checked on desktop and past papers on phone.

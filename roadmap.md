@@ -1,4 +1,5 @@
 # Repository import
+- [x] Prepare Primary 4 PDF previews: 130 real covers with page counts and sizes; 161 confirmed missing files marked; all three collections checked on desktop and past papers on phone.
 - [x] Prepare Primary 3 PDF previews: 1,764 real covers with page counts and sizes; 214 confirmed missing files marked; all seven collections checked on desktop and past papers on phone.
 - [ ] Recover five Primary 3 PDFs: original files are damaged and fail both PDFium and Poppler; valid replacement PDFs required.
 - [x] Inspect source and preserve project-owned runtime settings.

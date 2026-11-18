@@ -1,4 +1,5 @@
 # Repository import
+- [ ] Prepare Senior Two PDF previews: generate covers, page counts and sizes; mark confirmed missing files and check collection cards.
 - [x] Prepare Senior One PDF previews: 1,218 covers with page counts and sizes; 67 confirmed missing files marked; all six collections checked and phone layout verified.
 - [ ] Recover two Senior One Biology PDFs: both source files require passwords; unlocked replacements required.
 - [x] Prepare Primary 6 PDF previews: 2,102 real covers with page counts and sizes; 188 confirmed missing files marked; all eight collections checked, including phone cards.

@@ -1,6 +1,7 @@
 # Repository import
 - [x] Prepare Senior Two PDF previews: 1,135 covers with page counts and sizes; 112 Word/archive files stay plain file cards; all four collections checked on desktop and phone.
-- [ ] Prepare Senior Three PDF previews: generate covers, page counts and sizes; mark confirmed missing files and check collection cards.
+- [x] Prepare Senior Three PDF previews: 2,148 covers with page counts and sizes; 114 confirmed missing files marked; all five available collections checked and phone pagination verified.
+- [ ] Recover eight Senior Three PDFs: two damaged files and six password-protected files need readable, unlocked replacements.
 - [ ] Prepare Senior Four PDF previews: generate covers, page counts and sizes; mark confirmed missing files and check collection cards.
 - [ ] Prepare Senior Five PDF previews: generate covers, page counts and sizes; mark confirmed missing files and check collection cards.
 - [ ] Prepare Senior Six PDF previews: generate covers, page counts and sizes; mark confirmed missing files and check collection cards.

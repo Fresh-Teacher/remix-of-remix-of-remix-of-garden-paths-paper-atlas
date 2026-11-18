@@ -6,6 +6,41 @@ const root = join(process.cwd(), 'src/data/catalog');
 const read = (p: string) => JSON.parse(readFileSync(p, 'utf8'));
 
 describe('baked page items', () => {
+  it('keeps Senior Three covers, page counts and sizes consistent across collections', () => {
+    const thumbs = read(join(root, 'thumb-map.json'));
+    const urls = new Set<string>();
+    let covers = 0;
+    let missing = 0;
+    let unreadable = 0;
+    for (const kind of ['resources', 'repositories']) {
+      for (const name of readdirSync(join(root, 'page-items', kind))) {
+        if (!/^SeniorThree|^(?:exams-s3|s3(?:-notes|-past-papers)?)\.json$/.test(name)) continue;
+        for (const item of read(join(root, 'page-items', kind, name))) {
+          if (!new URL(item.pdfUrl).pathname.toLowerCase().endsWith('.pdf')) continue;
+          const saved = thumbs[item.pdfUrl];
+          if (saved) {
+            expect(item.thumbUrl).toBe(saved.thumbUrl);
+            expect(existsSync(join(process.cwd(), 'public', saved.thumbUrl))).toBe(true);
+            if (saved.thumbUrl === '/thumbs/broken-link.webp') expect(item.pages).toBeUndefined();
+            else {
+              expect(item.pages).toBe(saved.pages);
+              expect(item.sizeBytes).toBe(saved.sizeBytes);
+              expect(item.pages).toBeGreaterThan(0);
+              expect(item.sizeBytes).toBeGreaterThan(0);
+            }
+          }
+          if (urls.has(item.pdfUrl)) continue;
+          urls.add(item.pdfUrl);
+          if (!saved) unreadable++;
+          else if (saved.thumbUrl === '/thumbs/broken-link.webp') missing++;
+          else covers++;
+        }
+      }
+    }
+    expect(covers).toBe(2148);
+    expect(missing).toBe(114);
+    expect(unreadable).toBe(8);
+  });
   it('keeps prepared Senior One page counts and sizes consistent with saved covers', () => {
     const thumbs = read(join(root, 'thumb-map.json'));
     const prepared = new Set<string>();
